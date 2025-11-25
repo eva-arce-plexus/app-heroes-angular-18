@@ -1,0 +1,12 @@
+<h2>Hero detail</h2>
+@if (hero()) {
+  <div class="hero-detail">
+    <h3>{{ hero()?.superhero }}</h3>
+    <img [src]="'assets/heroes/' + hero()?.img + '.jpg'" [alt]="hero()?.superhero" />
+    <p><strong>Publisher:</strong> {{ hero()?.publisher }}</p>
+    <p><strong>Alter Ego:</strong> {{ hero()?.alter_ego }}</p>
+    <p><strong>First Appearance:</strong> {{ hero()?.first_appearance }}</p>
+  </div>
+} @else {
+  <p>Loading hero details...</p>
+}

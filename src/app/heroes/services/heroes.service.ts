@@ -13,9 +13,19 @@ export class HeroesService {
 
   /**
    * Fetches the list of heroes from the API.
-   * @return {Observable<Hero[]>}
+   * @return Observable of Hero array.
    */
   public getHeroes(): Observable<Hero[]> {
       return this.http.get<Hero[]>(this.apiUrl);
     }
+
+
+  /**
+   * Fetches a single hero by its ID from the API.
+   * @param id Hero identifier.
+   * @returns Observable of Hero array.
+   */
+  public getHeroById(id: string): Observable<Hero> {
+    return this.http.get<Hero>(`${this.apiUrl}/${id}`);
+  }
 }

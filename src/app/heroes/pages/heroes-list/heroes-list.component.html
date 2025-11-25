@@ -1,7 +1,12 @@
 <h2>Heroes list</h2>
 <div class="heroes-list">
   @for (hero of heroes(); track hero.id) {
-  <p>{{ hero.superhero }} - {{ hero.publisher }}</p>
+  <p>
+    <a [routerLink]="['/heroes/detail', hero.id]">
+      {{ hero.superhero }}
+    </a>
+    - {{ hero.publisher }}
+  </p>
   } @empty {
   <p>No heroes found.</p>
   }
