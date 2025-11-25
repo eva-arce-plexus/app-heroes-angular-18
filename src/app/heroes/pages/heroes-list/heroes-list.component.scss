@@ -1,18 +1,18 @@
 .heroes-list {
   display: flex;
   flex-direction: column;
-  gap: 10px;
-  padding: 16px;
+  gap: 0.625rem;
+  padding: 1rem;
   background-color: #f9f9f9;
-  border-radius: 8px;
+  border-radius: 0.5rem;
 }
 
 .heroes-list p {
   margin: 0;
-  padding: 8px;
+  padding: 0.5rem;
   background: #fff;
-  border: 1px solid #ddd;
-  border-radius: 4px;
+  border: 0.0625rem solid #ddd;
+  border-radius: 0.25rem;
   font-size: 1rem;
   color: #333;
 }
