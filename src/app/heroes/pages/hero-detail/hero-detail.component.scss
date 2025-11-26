@@ -1,0 +1,36 @@
+.hero-detail {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin: 1rem auto;
+  padding: 1rem;
+  background-color: #f9f9f9;
+  border: 0.0625rem solid #ddd;
+  border-radius: 0.5rem;
+  width: fit-content;
+  min-width: 20rem;
+}
+
+.hero-detail h3 {
+  text-align: center;
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+  margin-top: 0.5rem;
+}
+
+.hero-detail img {
+  max-width: 12rem;
+  border-radius: 0.25rem;
+  margin-bottom: 1rem;
+}
+
+.hero-detail p {
+  font-size: 1rem;
+  margin: 0.25rem 0;
+}
+
+h2 {
+  text-align: left;
+  margin-bottom: 1rem
+}
