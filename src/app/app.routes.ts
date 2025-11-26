@@ -12,5 +12,9 @@ export const routes: Routes = [
   {
     path: 'heroes/list',
     loadComponent: () => import('./heroes/pages/heroes-list/heroes-list.component').then(m => m.HeroesListComponent)
+  },
+  {
+    path: 'heroes/add',
+    loadComponent: () => import('./heroes/pages/hero-form/hero-form.component').then(m => m.HeroFormComponent)
   }
 ];
