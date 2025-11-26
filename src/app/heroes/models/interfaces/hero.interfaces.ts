@@ -2,8 +2,8 @@ export interface Hero {
   /** Unique hero ID (e.g., "batman") */
   id: string;
 
-  /** Main image name (e.g., "dc-batman") */
-  img: string;
+  /** Main image name (e.g., "dc-batman") or null */
+  img: string | null;
 
   /** Superhero name (e.g., "Batman") */
   superhero: string;
