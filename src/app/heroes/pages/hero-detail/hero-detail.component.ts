@@ -1,12 +1,12 @@
 import { Component, inject } from '@angular/core';
-import { ActivatedRoute} from '@angular/router';
+import { ActivatedRoute, RouterLink} from '@angular/router';
 import { HeroesService } from '../../services/heroes.service';
 import { toSignal } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-hero-detail',
   standalone: true,
-  imports: [],
+  imports: [RouterLink],
   templateUrl: './hero-detail.component.html',
   styleUrl: './hero-detail.component.scss'
 })
