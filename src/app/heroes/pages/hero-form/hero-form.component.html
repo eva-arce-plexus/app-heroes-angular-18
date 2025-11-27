@@ -1,24 +1,44 @@
 @if (notification) {
-  <div class="toast {{ notificationType }}">
-    {{ notification }}
-  </div>
+<div class="toast {{ notificationType }}">
+  {{ notification }}
+</div>
 }
 
 <nav class="navbar">
   <a class="navbar__action" [routerLink]="['/heroes/list']">←</a>
-  <h2 class="navbar__title">Add new Hero</h2>
+  <h2 class="navbar__title">
+    {{ isEdit ? "Edit hero" : "Add new hero" }}
+  </h2>
 </nav>
 
-<form class="heroForm" [formGroup]="heroForm" (ngSubmit)="addHero()">
-  @for (field of fields; track field.name) {
-  <div class="heroForm__field">
-    <label class="heroForm__field-label">{{ field.label }}:</label>
-    <input class="heroForm__field-input" [formControlName]="field.name" />
-    @if (isFieldInvalid(field.name)) {
-    <small class="heroForm__field-advice">This field is required</small>
-    }
+<div class="hero-container {{ isEdit ? 'with-image' : 'no-image' }}">
+  @if (isEdit) {
+  <div class="hero-img-container">
+    <img
+      class="hero-img-container__img-preview"
+      [src]="getHeroImage(heroForm.get('img')?.value)"
+      alt="{{ heroForm.value.superhero }}"
+    />
   </div>
   }
 
-  <button class="heroForm__add-hero-btn" type="submit" [disabled]="heroForm.invalid">Add hero</button>
-</form>
+  <form class="hero-form" [formGroup]="heroForm" (ngSubmit)="addHero()">
+    @for (field of fields; track field.name) {
+    <div class="hero-form__field">
+      <label class="hero-form__field-label">{{ field.label }}:</label>
+      <input class="hero-form__field-input" [formControlName]="field.name" />
+      @if (isFieldInvalid(field.name)) {
+      <small class="hero-form__field-advice">This field is required</small>
+      }
+    </div>
+    }
+
+    <button
+      class="hero-form__add-hero-btn"
+      type="submit"
+      [disabled]="heroForm.invalid"
+    >
+      {{ isEdit ? "Update hero" : "Add hero" }}
+    </button>
+  </form>
+</div>

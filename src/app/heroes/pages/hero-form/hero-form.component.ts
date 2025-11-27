@@ -1,8 +1,8 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { HeroesService } from '../../services/heroes.service';
 import { Hero } from '../../models/interfaces/hero.interfaces';
-import { Router, RouterLink } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-hero-form',
@@ -12,15 +12,34 @@ import { Router, RouterLink } from '@angular/router';
   styleUrl: './hero-form.component.scss'
 })
 
-export class HeroFormComponent {
+export class HeroFormComponent implements OnInit{
   /** Service to handle hero API requests */
   private _heroService = inject(HeroesService);
 
   /** Router for navigation */
   private _router = inject(Router);
 
+  /** ActivatedRoute to detect edit mode and read: id */
+  private _route = inject(ActivatedRoute);
+
   /** FormBuilder to create reactive form */
   private _fb = inject(FormBuilder);
+
+  /** Flag to know if the form is in edit mode */
+  public isEdit = false;
+
+  /**
+   * Initializes the form mode (create or edit) based on the route.
+   * If an `id` is present, loads the hero data into the form for editing.
+   */
+  ngOnInit(): void {
+    const heroId = this._route.snapshot.paramMap.get('id');
+    this.isEdit = !!heroId;
+
+    if (this.isEdit && heroId) {
+      this.loadHero(heroId);
+    }
+  }
 
   /** Reactive form for hero creation */
   public heroForm = this._fb.group({
@@ -89,13 +108,48 @@ export class HeroFormComponent {
   }
 
   /**
+   * Returns the hero image path or a default placeholder if none is provided.
+   *
+   * @param heroImg Image name or null/undefined.
+   * @returns Path to the hero image or default image.
+   */
+  public getHeroImage(heroImg: string | null | undefined): string {
+    if (!heroImg || heroImg.trim() === '') {
+      return 'assets/no-image.png';
+    }
+    return `assets/heroes/${heroImg}.jpg`;
+  }
+
+  /**
   * Displays a temporary notification
   * @param message Notification text
   * @param type Notification type (success/error)
   */
-  private showNotification(message: string, type: 'success' | 'error') {
+  private showNotification(message: string, type: 'success' | 'error'): void {
     this.notification = message;
     this.notificationType = type;
     setTimeout(() => this.notification = null, 6000);
+  }
+
+  /**
+   * Loads hero data into the form for edit mode.
+   * @param id Hero ID to fetch data.
+   */
+  private loadHero(id: string): void {
+    this._heroService.getHeroById(id).subscribe({
+      next: (hero) => {
+        this.heroForm.patchValue({
+          superhero: hero.superhero,
+          img: hero.img ?? '',
+          publisher: hero.publisher,
+          alter_ego: hero.alter_ego,
+          first_appearance: hero.first_appearance,
+          alt_img: hero.alt_img ?? ''
+        });
+      },
+      error: (err) => {
+        this.showNotification(err.message ?? '❌ Error loading hero data.', 'error');
+      }
+    });
   }
 }
