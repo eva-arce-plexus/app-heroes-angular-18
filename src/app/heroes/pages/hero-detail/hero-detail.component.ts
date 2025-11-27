@@ -2,6 +2,7 @@ import { Component, inject } from '@angular/core';
 import { ActivatedRoute, RouterLink} from '@angular/router';
 import { HeroesService } from '../../services/heroes.service';
 import { toSignal } from '@angular/core/rxjs-interop';
+import { Hero } from '../../models/interfaces/hero.interfaces';
 
 @Component({
   selector: 'app-hero-detail',
@@ -25,10 +26,16 @@ export class HeroDetailComponent {
   /**
    * Stores the hero ID from the current route.
    */
-  private heroId = this._route.snapshot.paramMap.get('id')!;
+  private _heroId = this._route.snapshot.paramMap.get('id')!;
 
   /**
    * Signal holding hero details fetched by ID.
    */
-  public hero = toSignal(this._heroesService.getHeroById(this.heroId), { initialValue: null });
+  public hero = toSignal(this._heroesService.getHeroById(this._heroId), { initialValue: null });
+
+  public getHeroImage(hero: Hero): string {
+    return hero.img && hero.img.trim() !== ''
+      ? `assets/heroes/${hero.img}.jpg`
+      : 'assets/no-image.png';
+  }
 }

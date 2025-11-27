@@ -17,7 +17,7 @@ export class HeroFormComponent {
   private _heroService = inject(HeroesService);
 
   /** Router for navigation */
-  private router = inject(Router);
+  private _router = inject(Router);
 
   /** FormBuilder to create reactive form */
   private _fb = inject(FormBuilder);
@@ -48,51 +48,54 @@ export class HeroFormComponent {
   /** Notification type: success or error */
   public notificationType: 'success' | 'error' = 'success';
 
-  /**
-   * Handles hero creation when form is submitted
-   */
+  /** Handles hero creation when form is submitted */
   public addHero(): void {
-    if (this.heroForm.valid) {
-      const newHero: Hero = {
-        id: this.heroForm.value.superhero!.toLowerCase().replace(/\s+/g, '-'),
-        ...this.heroForm.value,
-      } as Hero;
-
-      this._heroService.createHero(newHero).subscribe({
-        next: (hero) => {
-          this.showNotification('✅ Hero created successfully!', 'success');
-          this.heroForm.reset();
-          setTimeout(() => this.goToHomePage(), 3000);
-        },
-        error: (err) => {
-          const raw = err?.error;
-          const isDuplicate = typeof raw === 'string' && raw.toLowerCase().includes('duplicate id');
-          const message = isDuplicate
-            ? '❌ Cannot create hero. Try a different Superhero name.'
-            : '❌ Error creating hero. Please try again.';
-          this.showNotification(message, 'error');
-        }
-      });
+    if (this.heroForm.invalid) {
+      this.heroForm.markAllAsTouched();
+      return;
     }
-  }
 
-  /**
-    * Displays a temporary notification
-    * @param message Notification text
-    * @param type Notification type (success/error)
-    */
-  private showNotification(message: string, type: 'success' | 'error') {
-    this.notification = message;
-    this.notificationType = type;
-    setTimeout(() => this.notification = null, 6000);
+    const newHero: Hero = {
+      id: this.heroForm.value.superhero!.toLowerCase().replace(/\s+/g, '-'),
+      ...this.heroForm.value,
+    } as Hero;
+
+    this._heroService.createHero(newHero).subscribe({
+      next: () => {
+        this.showNotification('✅ Hero created successfully!', 'success');
+        this.heroForm.reset();
+        setTimeout(() => this.goToHomePage(), 2500);
+      },
+      error: (err) => {
+        this.showNotification(err.message, 'error');
+      }
+    });
   }
 
   /** Navigates to hero list page */
   public goToHomePage(): void {
-    this.router.navigate(['/heroes/list']);
+    this._router.navigate(['/heroes/list']);
   }
+
   /** Clears the form fields */
   public cleanForm(): void {
     this.heroForm.reset();
+  }
+
+  /** Checks if a form field is invalid and has been touched. */
+  public isFieldInvalid(fieldName: string): boolean {
+    const control = this.heroForm.get(fieldName);
+    return control ? control.invalid && control.touched : false;
+  }
+
+  /**
+  * Displays a temporary notification
+  * @param message Notification text
+  * @param type Notification type (success/error)
+  */
+  private showNotification(message: string, type: 'success' | 'error') {
+    this.notification = message;
+    this.notificationType = type;
+    setTimeout(() => this.notification = null, 6000);
   }
 }

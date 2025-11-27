@@ -8,11 +8,7 @@
   <h3 class="hero-detail__title">{{ hero.superhero }}</h3>
   <img
     class="hero-detail__img"
-    [src]="
-      hero.img && hero.img.trim() !== ''
-        ? 'assets/heroes/' + hero.img + '.jpg'
-        : 'assets/no-image.png'
-    "
+    [src]="getHeroImage(hero)"
     [alt]="hero.superhero"
   />
   <p class="hero-detail__text">

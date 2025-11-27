@@ -14,7 +14,7 @@
   <div class="heroForm__field">
     <label class="heroForm__field-label">{{ field.label }}:</label>
     <input class="heroForm__field-input" [formControlName]="field.name" />
-    @if (field.required && heroForm.get(field.name)?.invalid && heroForm.get(field.name)?.touched) {
+    @if (isFieldInvalid(field.name)) {
     <small class="heroForm__field-advice">This field is required</small>
     }
   </div>
