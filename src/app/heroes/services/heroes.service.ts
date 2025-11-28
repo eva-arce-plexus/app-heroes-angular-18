@@ -1,6 +1,6 @@
 import { HttpClient } from "@angular/common/http";
 import { inject, Injectable } from "@angular/core";
-import { catchError, Observable, tap, throwError, Subject } from "rxjs";
+import { catchError, Observable, tap, throwError } from "rxjs";
 import { Hero } from "../models/interfaces/hero.interfaces";
 
 @Injectable({
@@ -75,6 +75,31 @@ export class HeroesService {
           return throwError(() => new Error(message));
         }
       )
+    );
+  }
+
+  /**
+   * Updates an existing hero
+   * Requires a valid hero.id.
+   * @param hero Full hero data to update.
+   * @returns Observable that emits the updated hero.
+   */
+  public updateHero(hero: Hero): Observable<Hero> {
+    if (!hero?.id) {
+      const msg = '❌ Cannot update hero without a valid id.';
+      this._setNotification(msg, 'error');
+      return throwError(() => new Error(msg));
+    }
+
+    return this._http.put<Hero>(`${this._apiUrl}/${hero.id}`, hero).pipe(
+      tap(() => {
+        this._setNotification('✅ Hero updated successfully!', 'success');
+      }),
+      catchError(() => {
+        const message = '❌ Error updating hero. Please try again.';
+        this._setNotification(message, 'error');
+        return throwError(() => new Error(message));
+      })
     );
   }
 

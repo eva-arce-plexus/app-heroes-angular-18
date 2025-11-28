@@ -12,7 +12,7 @@ import { ActivatedRoute, Router, RouterLink } from '@angular/router';
   styleUrl: './hero-form.component.scss'
 })
 
-export class HeroFormComponent implements OnInit{
+export class HeroFormComponent implements OnInit {
   /** Service to handle hero API requests */
   private _heroService = inject(HeroesService);
 
@@ -62,21 +62,31 @@ export class HeroFormComponent implements OnInit{
   ];
 
   /** Handles hero creation when form is submitted */
-  public addHero(): void {
+  public submit(): void {
     if (this.heroForm.invalid) {
       this.heroForm.markAllAsTouched();
       return;
     }
 
-    const newHero: Hero = {
-      id: this.heroForm.value.superhero!.toLowerCase().replace(/\s+/g, '-'),
-      ...this.heroForm.value,
+    const formValue = this.heroForm.value;
+    const heroId = this._route.snapshot.paramMap.get('id');
+    const hero: Hero = {
+      id: this.isEdit && heroId
+        ? heroId
+        : formValue.superhero!.toLowerCase().replace(/\s+/g, '-'),
+      ...formValue,
     } as Hero;
 
-    this._heroService.createHero(newHero).subscribe({
+    const request = this.isEdit
+      ? this._heroService.updateHero(hero)
+      : this._heroService.createHero(hero);
+
+    request.subscribe({
       next: () => {
-        this.heroForm.reset();
         setTimeout(() => this.goToHomePage(), 4000);
+      },
+      error: (err) => {
+        console.error('Error saving hero:', err);
       }
     });
   }
@@ -84,11 +94,7 @@ export class HeroFormComponent implements OnInit{
   /** Navigates to hero list page */
   public goToHomePage(): void {
     this._router.navigate(['/heroes/list']);
-  }
-
-  /** Clears the form fields */
-  public cleanForm(): void {
-    this.heroForm.reset();
+    this._cleanForm();
   }
 
   /** Checks if a form field is invalid and has been touched. */
@@ -127,5 +133,10 @@ export class HeroFormComponent implements OnInit{
         });
       }
     });
+  }
+
+  /** Clears the form fields */
+  private _cleanForm(): void {
+    this.heroForm.reset();
   }
 }

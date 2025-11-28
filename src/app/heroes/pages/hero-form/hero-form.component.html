@@ -11,12 +11,12 @@
     <img
       class="hero-img-container__img-preview"
       [src]="getHeroImage(heroForm.get('img')?.value)"
-      alt="{{ heroForm.value.superhero }}"
+      alt="heroForm.value.superhero || 'Hero image preview'"
     />
   </div>
   }
 
-  <form class="hero-form" [formGroup]="heroForm" (ngSubmit)="addHero()">
+  <form class="hero-form" [formGroup]="heroForm" (ngSubmit)="submit()">
     @for (field of fields; track field.name) {
     <div class="hero-form__field">
       <label class="hero-form__field-label">{{ field.label }}:</label>
