@@ -50,7 +50,7 @@ export class HeroFormComponent {
     }
 
     const newHero: Hero = {
-      id: this.heroForm.value.superhero!.toLowerCase().replace(/\s+/g, '-'),
+      id: crypto.randomUUID(),
       ...this.heroForm.value,
     } as Hero;
 

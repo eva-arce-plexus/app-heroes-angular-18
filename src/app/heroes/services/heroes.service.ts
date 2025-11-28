@@ -1,6 +1,6 @@
 import { HttpClient } from "@angular/common/http";
-import { inject, Injectable } from "@angular/core";
-import { catchError, Observable, tap, throwError, Subject } from "rxjs";
+import { inject, Injectable, signal } from "@angular/core";
+import { catchError, Observable, tap, throwError } from "rxjs";
 import { Hero } from "../models/interfaces/hero.interfaces";
 
 @Injectable({
@@ -10,11 +10,11 @@ export class HeroesService {
   /** HttpClient for API requests */
   private _http = inject(HttpClient);
 
-  /** Current notification message */
-  public notification: string | null = null;
+  /** Signal to hold the current notification message */
+  public notification = signal<string | null>(null);
 
-  /** Notification type: success or error */
-  public notificationType: 'success' | 'error' = 'success';
+  /** Signal to hold the notification type */
+  public notificationType = signal<'success' | 'error'>('success');
 
   /** Base API URL for heroes */
   private _apiUrl = "http://localhost:3000/heroes";
@@ -28,7 +28,7 @@ export class HeroesService {
       tap(() => {
         this._setNotification('✅ Heroes loaded successfully!', 'success');
       }),
-      catchError((err) => {
+      catchError(() => {
         this._setNotification('❌ Error loading heroes. Please try again.', 'error');
         return throwError(() => new Error('Error loading heroes'));
       })
@@ -46,7 +46,7 @@ export class HeroesService {
         tap(() => {
           this._setNotification('✅ Hero details loaded successfully!', 'success');
         }),
-        catchError((err) => {
+        catchError(() => {
           this._setNotification('❌ Error loading hero details. Please try again.', 'error');
           return throwError(() => new Error('Error loading hero details'));
         })
@@ -84,9 +84,9 @@ export class HeroesService {
   * @param type Notification type (success/error)
   */
   private _setNotification(message: string, type: 'success' | 'error') {
-    this.notification = message;
-    this.notificationType = type;
+    this.notification.set(message);
+    this.notificationType.set(type);
 
-    setTimeout(() => this.notification = null, 4000);
+    setTimeout(() => this.notification.set(null), 4000)
   }
 }

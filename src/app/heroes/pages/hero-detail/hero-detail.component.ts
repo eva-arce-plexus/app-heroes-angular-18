@@ -25,6 +25,13 @@ export class HeroDetailComponent {
   /** Signal holding hero details fetched by ID */
   public hero = toSignal(this._heroesService.getHeroById(this._heroId), { initialValue: null });
 
+  /**
+  * Builds the image path for a hero.
+  * If no image is provided, returns a default placeholder.
+  *
+  * @param hero Hero object containing the image name.
+  * @returns Image path as a string.
+  */
   public getHeroImage(hero: Hero): string {
     return hero.img && hero.img.trim() !== ''
       ? `assets/heroes/${hero.img}.jpg`
