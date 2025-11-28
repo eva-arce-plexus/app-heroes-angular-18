@@ -57,6 +57,7 @@ export class HeroFormComponent {
     this._heroService.createHero(newHero).subscribe({
       next: () => {
         this.heroForm.reset();
+        setTimeout(() => this.goToHomePage(), 4000);
       }
     });
   }
