@@ -42,12 +42,6 @@ export class HeroFormComponent {
     { name: 'alt_img', label: 'Alt Image', required: false },
   ];
 
-  /** Current notification message */
-  public notification: string | null = null;
-
-  /** Notification type: success or error */
-  public notificationType: 'success' | 'error' = 'success';
-
   /** Handles hero creation when form is submitted */
   public addHero(): void {
     if (this.heroForm.invalid) {
@@ -62,12 +56,7 @@ export class HeroFormComponent {
 
     this._heroService.createHero(newHero).subscribe({
       next: () => {
-        this.showNotification('✅ Hero created successfully!', 'success');
         this.heroForm.reset();
-        setTimeout(() => this.goToHomePage(), 2500);
-      },
-      error: (err) => {
-        this.showNotification(err.message, 'error');
       }
     });
   }
@@ -86,16 +75,5 @@ export class HeroFormComponent {
   public isFieldInvalid(fieldName: string): boolean {
     const control = this.heroForm.get(fieldName);
     return control ? control.invalid && control.touched : false;
-  }
-
-  /**
-  * Displays a temporary notification
-  * @param message Notification text
-  * @param type Notification type (success/error)
-  */
-  private showNotification(message: string, type: 'success' | 'error') {
-    this.notification = message;
-    this.notificationType = type;
-    setTimeout(() => this.notification = null, 6000);
   }
 }

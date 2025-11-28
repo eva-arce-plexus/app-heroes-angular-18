@@ -13,24 +13,16 @@ import { Hero } from '../../models/interfaces/hero.interfaces';
 })
 
 export class HeroDetailComponent {
-  /**
-   * Provides access to route parameters.
-   */
+  /** Provides access to route parameters */
   private _route = inject(ActivatedRoute);
 
-  /**
-   * Provides access to HeroesService for fetching hero data.
-   */
+  /** Provides access to HeroesService for fetching hero data */
   private readonly _heroesService = inject(HeroesService);
 
-  /**
-   * Stores the hero ID from the current route.
-   */
+  /** Stores the hero ID from the current route. */
   private _heroId = this._route.snapshot.paramMap.get('id')!;
 
-  /**
-   * Signal holding hero details fetched by ID.
-   */
+  /** Signal holding hero details fetched by ID */
   public hero = toSignal(this._heroesService.getHeroById(this._heroId), { initialValue: null });
 
   public getHeroImage(hero: Hero): string {
