@@ -1,6 +1,11 @@
 <nav class="navbar">
-  <a class="navbar__action" [routerLink]="['/heroes/list']">←</a>
-  <h2 class="navbar__title">Hero detail</h2>
+  <div class="navbar__left">
+    <a class="navbar__action-back" [routerLink]="['/heroes/list']">←</a>
+    <h2 class="navbar__title">Hero detail</h2>
+  </div>
+  @if (heroId) {
+    <a class="navbar__action-edit-btn" [routerLink]="['/heroes/edit', heroId]">Edit hero</a>
+  }
 </nav>
 
 @if (hero(); as hero) {

@@ -83,18 +83,18 @@ export class HeroFormComponent implements OnInit {
 
     request.subscribe({
       next: () => {
-        setTimeout(() => this.goToHomePage(), 4000);
+        setTimeout(() => {
+          if (this.isEdit) {
+            this._router.navigate(['/heroes/detail', hero.id]).then(() => this._cleanForm());
+          } else {
+            this._router.navigate(['/heroes/list']).then(() => this._cleanForm());
+          }
+        }, 4000);
       },
       error: (err) => {
         console.error('Error saving hero:', err);
       }
     });
-  }
-
-  /** Navigates to hero list page */
-  public goToHomePage(): void {
-    this._router.navigate(['/heroes/list']);
-    this._cleanForm();
   }
 
   /** Checks if a form field is invalid and has been touched. */

@@ -20,10 +20,10 @@ export class HeroDetailComponent {
   private readonly _heroesService = inject(HeroesService);
 
   /** Stores the hero ID from the current route. */
-  private _heroId = this._route.snapshot.paramMap.get('id')!;
+  public heroId = this._route.snapshot.paramMap.get('id')!;
 
   /** Signal holding hero details fetched by ID */
-  public hero = toSignal(this._heroesService.getHeroById(this._heroId), { initialValue: null });
+  public hero = toSignal(this._heroesService.getHeroById(this.heroId), { initialValue: null });
 
   /**
    * Builds the image path for a hero.
