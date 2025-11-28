@@ -102,6 +102,30 @@ export class HeroesService {
       })
     );
   }
+  
+  /**
+     * Deletes a hero by ID.
+     * @param id Hero identifier.
+     * @returns Observable<void> (or Hero if backend returns deleted hero)
+     */
+  public deleteHero(id: string): Observable<void> {
+    if (!id) {
+      const msg = '❌ Cannot delete hero without a valid id.';
+      this._setNotification(msg, 'error');
+      return throwError(() => new Error(msg));
+    }
+
+    return this._http.delete<void>(`${this._apiUrl}/${id}`).pipe(
+      tap(() => {
+        this._setNotification('✅ Hero deleted successfully!', 'success');
+      }),
+      catchError(() => {
+        const message = '❌ Error deleting hero. Please try again.';
+        this._setNotification(message, 'error');
+        return throwError(() => new Error(message));
+      })
+    );
+  }
 
   /**
   * Displays a temporary notification
