@@ -1,3 +1,33 @@
+.navbar {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1rem 2rem;
+  background-color: #ffffff;
+  border-bottom: 0.0625rem solid #e5e7eb;
+
+  &__action {
+    display: inline-block;
+    padding: 0.5rem 1rem;
+    font-size: 1rem;
+    color: #ffffff;
+    background-color: #007bff;
+    text-decoration: none;
+    border-radius: 0.5rem;
+  }
+
+  &__action:hover {
+    background-color: #0069d9;
+  }
+
+  &__title {
+    margin: 0;
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #111827;
+  }
+}
+
 .hero-detail {
   display: flex;
   flex-direction: column;
@@ -10,27 +40,22 @@
   border-radius: 0.5rem;
   width: fit-content;
   min-width: 20rem;
-}
 
-.hero-detail h3 {
-  text-align: center;
-  font-size: 1.5rem;
-  margin-bottom: 1rem;
-  margin-top: 0.5rem;
-}
+  &__title {
+    text-align: center;
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+    margin-top: 0.5rem;
+  }
 
-.hero-detail img {
-  max-width: 12rem;
-  border-radius: 0.25rem;
-  margin-bottom: 1rem;
-}
+  &__img {
+    max-width: 12rem;
+    border-radius: 0.25rem;
+    margin-bottom: 1rem;
+  }
 
-.hero-detail p {
-  font-size: 1rem;
-  margin: 0.25rem 0;
-}
-
-h2 {
-  text-align: left;
-  margin-bottom: 1rem
+  &__text {
+    font-size: 1rem;
+    margin: 0.25rem 0;
+  }
 }

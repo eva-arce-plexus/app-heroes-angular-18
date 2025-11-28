@@ -1,12 +1,26 @@
-<h2>Hero detail</h2>
-@if (hero()) {
-  <div class="hero-detail">
-    <h3>{{ hero()?.superhero }}</h3>
-    <img [src]="'assets/heroes/' + hero()?.img + '.jpg'" [alt]="hero()?.superhero" />
-    <p><strong>Publisher:</strong> {{ hero()?.publisher }}</p>
-    <p><strong>Alter Ego:</strong> {{ hero()?.alter_ego }}</p>
-    <p><strong>First Appearance:</strong> {{ hero()?.first_appearance }}</p>
-  </div>
+<nav class="navbar">
+  <a class="navbar__action" [routerLink]="['/heroes/list']">←</a>
+  <h2 class="navbar__title">Hero detail</h2>
+</nav>
+
+@if (hero(); as hero) {
+<div class="hero-detail">
+  <h3 class="hero-detail__title">{{ hero.superhero }}</h3>
+  <img
+    class="hero-detail__img"
+    [src]="getHeroImage(hero)"
+    [alt]="hero.superhero"
+  />
+  <p class="hero-detail__text">
+    <strong>Publisher:</strong> {{ hero.publisher }}
+  </p>
+  <p class="hero-detail__text">
+    <strong>Alter Ego:</strong> {{ hero.alter_ego }}
+  </p>
+  <p class="hero-detail__text">
+    <strong>First Appearance:</strong> {{ hero.first_appearance }}
+  </p>
+</div>
 } @else {
-  <p>Loading hero details...</p>
+<p>Loading hero details...</p>
 }

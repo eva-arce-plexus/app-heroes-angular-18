@@ -1,24 +1,39 @@
 import { HttpClient } from "@angular/common/http";
-import { inject, Injectable } from "@angular/core";
-import { Observable } from "rxjs";
+import { inject, Injectable, signal } from "@angular/core";
+import { catchError, Observable, tap, throwError } from "rxjs";
 import { Hero } from "../models/interfaces/hero.interfaces";
-
 
 @Injectable({
   providedIn: 'root'
 })
 export class HeroesService {
-  private http = inject(HttpClient);
-  private apiUrl = "http://localhost:3000/heroes";
+  /** HttpClient for API requests */
+  private _http = inject(HttpClient);
+
+  /** Signal to hold the current notification message */
+  public notification = signal<string | null>(null);
+
+  /** Signal to hold the notification type */
+  public notificationType = signal<'success' | 'error'>('success');
+
+  /** Base API URL for heroes */
+  private _apiUrl = "http://localhost:3000/heroes";
 
   /**
    * Fetches the list of heroes from the API.
    * @return Observable of Hero array.
    */
   public getHeroes(): Observable<Hero[]> {
-      return this.http.get<Hero[]>(this.apiUrl);
-    }
-
+    return this._http.get<Hero[]>(this._apiUrl).pipe(
+      tap(() => {
+        this._setNotification('✅ Heroes loaded successfully!', 'success');
+      }),
+      catchError(() => {
+        this._setNotification('❌ Error loading heroes. Please try again.', 'error');
+        return throwError(() => new Error('Error loading heroes'));
+      })
+    );
+  }
 
   /**
    * Fetches a single hero by its ID from the API.
@@ -26,6 +41,52 @@ export class HeroesService {
    * @returns Observable of Hero array.
    */
   public getHeroById(id: string): Observable<Hero> {
-    return this.http.get<Hero>(`${this.apiUrl}/${id}`);
+    return this._http.get<Hero>(`${this._apiUrl}/${id}`)
+      .pipe(
+        tap(() => {
+          this._setNotification('✅ Hero details loaded successfully!', 'success');
+        }),
+        catchError(() => {
+          this._setNotification('❌ Error loading hero details. Please try again.', 'error');
+          return throwError(() => new Error('Error loading hero details'));
+        })
+      );
+  }
+
+  /**
+   * Creates a new hero.
+   * Shows success or error notification automatically.
+   * @param hero Hero data to be created.
+   * @returns Observable that emits the created hero.
+   */
+  public createHero(hero: Hero): Observable<Hero> {
+    return this._http.post<Hero>(this._apiUrl, hero).pipe(
+      tap(() => {
+        this._setNotification('✅ Hero created successfully!', 'success');
+      }),
+      catchError(
+        (err) => {
+          const raw = err?.error;
+          const isDuplicate = typeof raw === 'string' && raw.toLowerCase().includes('duplicate id');
+          const message = isDuplicate
+            ? '❌ Cannot create hero. Try a different Superhero name.'
+            : '❌ Error creating hero. Please try again.';
+          this._setNotification(message, 'error');
+          return throwError(() => new Error(message));
+        }
+      )
+    );
+  }
+
+  /**
+  * Displays a temporary notification
+  * @param message Notification text
+  * @param type Notification type (success/error)
+  */
+  private _setNotification(message: string, type: 'success' | 'error') {
+    this.notification.set(message);
+    this.notificationType.set(type);
+
+    setTimeout(() => this.notification.set(null), 4000)
   }
 }

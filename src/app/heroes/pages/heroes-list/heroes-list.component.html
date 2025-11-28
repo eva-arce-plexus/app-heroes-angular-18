@@ -1,7 +1,11 @@
-<h2>Heroes list</h2>
+<nav class="navbar">
+  <h2 class="navbar__title">Heroes list</h2>
+  <a class="navbar__action" [routerLink]="['/heroes/add']">Add hero</a>
+</nav>
+
 <div class="heroes-list">
   @for (hero of heroes(); track hero.id) {
-  <p>
+  <p class="heroes-list__text">
     <a [routerLink]="['/heroes/detail', hero.id]">
       {{ hero.superhero }}
     </a>
