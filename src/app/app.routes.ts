@@ -1,4 +1,5 @@
 import { Routes } from '@angular/router';
+import { heroExistsGuard } from './heroes/guards/hero-exists.guard';
 
 export const routes: Routes = [
   {
@@ -7,6 +8,7 @@ export const routes: Routes = [
     pathMatch: 'full'
   },
   { path: 'heroes/detail/:id',
+    canActivate: [heroExistsGuard],
     loadComponent: () => import('./heroes/pages/hero-detail/hero-detail.component').then(m => m.HeroDetailComponent)
   },
   {
@@ -19,6 +21,7 @@ export const routes: Routes = [
   },
   {
     path: 'heroes/edit/:id',
+    canActivate: [heroExistsGuard],
     loadComponent: () => import('./heroes/pages/hero-form/hero-form.component').then(m => m.HeroFormComponent)
   }
 ];

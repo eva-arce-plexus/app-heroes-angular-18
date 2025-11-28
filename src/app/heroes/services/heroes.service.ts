@@ -102,7 +102,7 @@ export class HeroesService {
       })
     );
   }
-  
+
   /**
      * Deletes a hero by ID.
      * @param id Hero identifier.

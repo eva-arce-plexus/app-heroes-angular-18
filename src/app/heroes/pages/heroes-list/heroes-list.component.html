@@ -5,12 +5,23 @@
 
 <div class="heroes-list">
   @for (hero of heroes(); track hero.id) {
-  <p class="heroes-list__text">
-    <a [routerLink]="['/heroes/detail', hero.id]">
-      {{ hero.superhero }}
-    </a>
-    - {{ hero.publisher }}
-  </p>
+  <div class="heroes-list__row">
+    <div class="heroes-list__info">
+      <a [routerLink]="['/heroes/detail', hero.id]" class="heroes-list__name">
+        {{ hero.superhero }}
+      </a>
+      <span class="heroes-list__publisher">{{ hero.publisher }}</span>
+    </div>
+
+    <div class="heroes-list__actions">
+      <a [routerLink]="['/heroes/edit', hero.id]" class="heroes-list__edit-btn">
+        Edit
+      </a>
+      <button (click)="deleteHero(hero.id)" class="heroes-list__delete-btn">
+        Delete
+      </button>
+    </div>
+  </div>
   } @empty {
   <p>No heroes found.</p>
   }
