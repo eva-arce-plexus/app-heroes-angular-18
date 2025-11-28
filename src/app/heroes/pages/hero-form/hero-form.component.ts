@@ -37,7 +37,7 @@ export class HeroFormComponent implements OnInit{
     this.isEdit = !!heroId;
 
     if (this.isEdit && heroId) {
-      this.loadHero(heroId);
+      this._loadHero(heroId);
     }
   }
 
@@ -61,12 +61,6 @@ export class HeroFormComponent implements OnInit{
     { name: 'alt_img', label: 'Alt Image', required: false },
   ];
 
-  /** Current notification message */
-  public notification: string | null = null;
-
-  /** Notification type: success or error */
-  public notificationType: 'success' | 'error' = 'success';
-
   /** Handles hero creation when form is submitted */
   public addHero(): void {
     if (this.heroForm.invalid) {
@@ -81,12 +75,8 @@ export class HeroFormComponent implements OnInit{
 
     this._heroService.createHero(newHero).subscribe({
       next: () => {
-        this.showNotification('✅ Hero created successfully!', 'success');
         this.heroForm.reset();
-        setTimeout(() => this.goToHomePage(), 2500);
-      },
-      error: (err) => {
-        this.showNotification(err.message, 'error');
+        setTimeout(() => this.goToHomePage(), 4000);
       }
     });
   }
@@ -121,21 +111,10 @@ export class HeroFormComponent implements OnInit{
   }
 
   /**
-  * Displays a temporary notification
-  * @param message Notification text
-  * @param type Notification type (success/error)
-  */
-  private showNotification(message: string, type: 'success' | 'error'): void {
-    this.notification = message;
-    this.notificationType = type;
-    setTimeout(() => this.notification = null, 6000);
-  }
-
-  /**
    * Loads hero data into the form for edit mode.
    * @param id Hero ID to fetch data.
    */
-  private loadHero(id: string): void {
+  private _loadHero(id: string): void {
     this._heroService.getHeroById(id).subscribe({
       next: (hero) => {
         this.heroForm.patchValue({
@@ -146,9 +125,6 @@ export class HeroFormComponent implements OnInit{
           first_appearance: hero.first_appearance,
           alt_img: hero.alt_img ?? ''
         });
-      },
-      error: (err) => {
-        this.showNotification(err.message ?? '❌ Error loading hero data.', 'error');
       }
     });
   }
